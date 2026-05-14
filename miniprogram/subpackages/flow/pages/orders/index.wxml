@@ -1,0 +1,19 @@
+<view class="page {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view wx:if="{{!list.length}}" class="empty text-muted">暂无订单，去下一单吧</view>
+  <view class="ord card" wx:for="{{list}}" wx:key="id">
+    <view class="ord__hd">
+      <text class="text-muted">{{item.createdAt}}</text>
+      <view class="ord__hd-r">
+        <text class="ord__st">已支付</text>
+        <text class="ord__del tap tap-active" catchtap="onDeleteOrder" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+    <view class="ord__row" wx:for="{{item.lines}}" wx:for-item="l" wx:for-index="li" wx:key="li">
+      <text>{{l.name}} {{l.spec}} ×{{l.qty}}</text>
+    </view>
+    <view class="ord__ft">
+      <text class="text-muted">{{item.storeName}}</text>
+      <text class="ord__pay">¥{{item.pay}}</text>
+    </view>
+  </view>
+</view>

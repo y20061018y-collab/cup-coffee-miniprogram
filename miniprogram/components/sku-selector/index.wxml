@@ -1,0 +1,80 @@
+<view class="sku-root" wx:if="{{_render}}">
+  <view
+    class="sku-mask {{theme==='dark' ? 'sku-mask--dark' : ''}} {{_open ? 'is-open' : ''}}"
+    catchtap="onMaskTap"
+  />
+  <view
+    class="sku-panel theme-wrap {{theme==='dark' ? 'theme-dark' : ''}} {{_open ? 'is-open' : ''}}"
+    catchtap="stop"
+  >
+    <view class="sku-drag" />
+    <scroll-view scroll-y class="sku-scroll" show-scrollbar="{{false}}">
+      <view class="sku-title">
+        <text class="sku-title__eyebrow">CUSTOM CUP</text>
+        <text class="sku-title__main">定制你的这一杯</text>
+        <text class="sku-title__sub">{{product.story && product.story.scene ? product.story.scene : '选择规格后，咖啡师会按你的偏好制作'}}</text>
+      </view>
+      <view class="sku-top">
+        <image class="sku-cover" src="{{product.cover}}" mode="aspectFill" />
+        <view class="sku-top__rest">
+          <text class="sku-name">{{product.name}}</text>
+          <view class="sku-qty" catchtap="stop">
+            <view
+              class="sku-qty__btn sku-qty__btn--accent {{qty <= 1 ? 'is-disabled' : ''}}"
+              catchtap="onDecQty"
+            >−</view>
+            <text class="sku-qty__val">{{qty}}</text>
+            <view class="sku-qty__btn sku-qty__btn--accent" catchtap="onIncQty">+</view>
+          </view>
+        </view>
+      </view>
+
+      <block wx:for="{{groupsView}}" wx:key="key" wx:for-item="grp">
+        <view class="sku-g">
+          <view class="sku-g__title">
+            {{grp.title}}
+          </view>
+          <view class="sku-g__chips">
+            <block wx:if="{{grp.single}}">
+              <view
+                class="chip {{opt.on ? 'is-on' : ''}}"
+                wx:for="{{grp.options}}"
+                wx:for-item="opt"
+                wx:key="id"
+                data-g="{{grp.key}}"
+                data-id="{{opt.id}}"
+                bindtap="pickSingle"
+              >
+                {{opt.name}}
+              </view>
+            </block>
+            <block wx:else>
+              <view
+                class="chip chip--multi chip--topping {{opt.on ? 'is-on' : ''}}"
+                wx:for="{{grp.options}}"
+                wx:for-item="opt"
+                wx:key="id"
+                data-id="{{opt.id}}"
+                bindtap="toggleTopping"
+              >
+                <text class="chip__label">{{opt.name}}</text>
+                <text class="chip__price" wx:if="{{opt.price != null}}">￥{{opt.price}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <view class="sku-foot safe-bottom">
+      <view class="sku-foot__p">
+        <text class="sku-foot__lab">预计 3 分钟完成制作</text>
+        <view class="sku-foot__price">
+          <text class="sku-foot__sym">¥</text>
+          <text class="sku-foot__num">{{lineTotalText}}</text>
+        </view>
+      </view>
+      <button class="sku-foot__btn tap tap-active" bindtap="onAdd">去支付</button>
+    </view>
+  </view>
+</view>

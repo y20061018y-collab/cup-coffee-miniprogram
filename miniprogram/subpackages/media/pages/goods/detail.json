@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "CUP · 商品",
+  "usingComponents": {
+    "sku-selector": "/components/sku-selector/index"
+  }
+}

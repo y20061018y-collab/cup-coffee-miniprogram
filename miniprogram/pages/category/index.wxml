@@ -1,0 +1,41 @@
+<page-meta page-style="{{pageRootStyle}}" />
+<view class="page {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="search">
+    <input
+      class="search__input"
+      type="text"
+      confirm-type="search"
+      placeholder="搜索商品"
+      placeholder-class="search__ph"
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+    />
+  </view>
+  <view class="layout">
+    <scroll-view class="side" scroll-y>
+      <view
+        class="side__item {{cur===item.id ? 'is-active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onCat"
+      >{{item.name}}</view>
+    </scroll-view>
+    <scroll-view class="main" scroll-y>
+      <view class="main__inner">
+        <view class="grid">
+          <view class="grid__item" wx:for="{{list}}" wx:key="id">
+            <product-card item="{{item}}" bind:select="onProduct" />
+          </view>
+        </view>
+        <view class="end text-muted" wx:if="{{!list.length && !hasSearchQuery}}">
+          该分类下暂无商品
+        </view>
+        <view class="end text-muted" wx:if="{{!list.length && hasSearchQuery}}">
+          未找到相关商品
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

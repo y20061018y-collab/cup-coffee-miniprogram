@@ -1,0 +1,28 @@
+<page-meta page-style="{{pageRootStyle}}" />
+<view class="page user {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="u-head card" bindlongpress="onLogoLong">
+    <view class="u-av u-av--ph" wx:if="{{!user.avatar}}">{{user.isLogin ? 'C' : '?'}}</view>
+    <image wx:else class="u-av" src="{{user.avatar}}" mode="aspectFill" />
+    <view class="u-meta" bindtap="onLogin">
+      <text class="u-name">{{user.isLogin ? user.nickname : '点击模拟登录'}}</text>
+      <text class="text-muted" wx:if="{{user.isLogin}}">积分 {{user.points}} · {{levelName}}</text>
+    </view>
+  </view>
+  <view class="u-panel card">
+    <view class="u-row" bindtap="toggleTheme">
+      <text>深色模式</text>
+      <text class="u-tip">{{theme==='dark' ? '开' : '关'}}</text>
+    </view>
+    <view class="u-row u-row--showcase" bindtap="goShowcase">
+      <view class="u-row__main">
+        <text>作品 / 合作说明</text>
+        <text class="u-row__sub">咖啡品牌小程序案例 · 内容素材包</text>
+      </view>
+      <text class="u-tip">查看</text>
+    </view>
+    <view class="u-row" bindtap="onTapVersion">
+      <text>关于</text>
+      <text class="text-muted u-ver">CUP 展示版 {{tapCount ? '('+tapCount+')' : ''}}</text>
+    </view>
+  </view>
+</view>

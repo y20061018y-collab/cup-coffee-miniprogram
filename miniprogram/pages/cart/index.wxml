@@ -1,0 +1,164 @@
+<page-meta page-style="{{pageRootStyle}}" />
+<view class="page orders {{theme==='dark' ? 'theme-dark' : ''}}">
+
+  <view class="main-seg">
+    <view
+      class="main-seg__item {{mainSeg==='bag' ? 'is-on' : ''}}"
+      data-seg="bag"
+      bindtap="switchMainSeg"
+    >购物车</view>
+    <view
+      class="main-seg__item {{mainSeg==='orders' ? 'is-on' : ''}}"
+      data-seg="orders"
+      bindtap="switchMainSeg"
+    >订单</view>
+  </view>
+
+  <!-- ——— 购物车 ——— -->
+  <block wx:if="{{mainSeg === 'bag'}}">
+    <view wx:if="{{!bagLines.length}}" class="empty bag-empty">
+      <view class="steam-cup">
+        <view class="steam s1"></view>
+        <view class="steam s2"></view>
+        <view class="steam s3"></view>
+        <view class="cup">
+          <view class="coffee"></view>
+          <view class="handle"></view>
+        </view>
+        <view class="plate"></view>
+      </view>
+      <text class="empty__copy">杯子还空着，先去挑一杯？</text>
+      <view class="bag-empty__actions">
+        <button class="empty__btn empty__btn--outline" bindtap="goCategory">去分类</button>
+        <button class="empty__btn" bindtap="goHome">回首页</button>
+      </view>
+    </view>
+
+    <scroll-view wx:else scroll-y class="list bag-list">
+      <view class="bag-item" wx:for="{{bagLines}}" wx:key="rowKey" wx:for-item="it">
+        <image class="bag-item__img" src="{{it.cover}}" mode="aspectFill" />
+        <view class="bag-item__mid">
+          <text class="oc-item-name">{{it.name}}</text>
+          <text class="oc-item-spec">{{it.spec}}</text>
+          <text class="bag-item__unit">单价 ¥{{it._unit}}</text>
+        </view>
+        <view class="bag-item__right">
+          <text class="bag-item__sum">¥{{it._lineTotal}}</text>
+          <view class="stepper">
+            <view
+              class="stepper__btn tap tap-active"
+              data-key="{{it.rowKey}}"
+              data-delta="-1"
+              bindtap="onBagDelta"
+            >−</view>
+            <text class="stepper__num">{{it.qty}}</text>
+            <view
+              class="stepper__btn tap tap-active"
+              data-key="{{it.rowKey}}"
+              data-delta="1"
+              bindtap="onBagDelta"
+            >+</view>
+          </view>
+          <text class="bag-item__del tap tap-active" catchtap="onBagRemove" data-key="{{it.rowKey}}">删除</text>
+        </view>
+      </view>
+      <view class="list-end bag-list-end"></view>
+    </scroll-view>
+
+    <view wx:if="{{bagLines.length}}" class="bag-bar">
+      <view class="bag-bar-inner">
+        <view class="bag-bar-sum">
+          <text class="bag-bar-label">合计</text>
+          <text class="bag-bar-total">¥{{bagSubtotal}}</text>
+          <text class="bag-bar-count" wx:if="{{bagCount > 0}}">共 {{bagCount}} 件</text>
+        </view>
+        <button class="bag-bar-btn" bindtap="goCheckoutFromBag">去结算</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- ——— 订单 ——— -->
+  <block wx:else>
+
+    <view class="tabs">
+      <view
+        class="tab {{curTab===item.key ? 'is-on' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="switchTab"
+      >
+        <text class="tab__label">{{item.label}}</text>
+        <view class="tab__line" wx:if="{{curTab===item.key}}"></view>
+      </view>
+    </view>
+
+    <view wx:if="{{!orders.length}}" class="empty">
+      <view class="steam-cup">
+        <view class="steam s1"></view>
+        <view class="steam s2"></view>
+        <view class="steam s3"></view>
+        <view class="cup">
+          <view class="coffee"></view>
+          <view class="handle"></view>
+        </view>
+        <view class="plate"></view>
+      </view>
+      <text class="empty__copy">还没选好？让香气帮你决定 ☕</text>
+      <button class="empty__btn" bindtap="goHome">去看看今日推荐</button>
+    </view>
+
+    <scroll-view wx:else scroll-y class="list">
+      <view class="order-card" wx:for="{{orders}}" wx:key="id" wx:for-item="o">
+
+        <view class="oc-head">
+          <view class="oc-head-left">
+            <text class="oc-store">{{o.storeName || '门店自提'}}</text>
+            <text class="oc-time">{{o._time}}</text>
+          </view>
+          <text class="oc-status {{o._statusCls}}">{{o._statusLabel}}</text>
+        </view>
+
+        <view class="oc-divider"></view>
+
+        <view class="oc-items">
+          <view class="oc-item" wx:for="{{o.lines}}" wx:for-item="l" wx:for-index="li" wx:key="li">
+            <image class="oc-item-img" src="{{l.cover}}" mode="aspectFill" />
+            <view class="oc-item-info">
+              <text class="oc-item-name">{{l.name}}</text>
+              <text class="oc-item-spec">{{l.spec}}</text>
+            </view>
+            <view class="oc-item-right">
+              <text class="oc-item-qty">×{{l.qty}}</text>
+              <text class="oc-item-price">¥{{l.price}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="oc-divider"></view>
+
+        <view class="oc-footer">
+          <view class="oc-footer-amount">
+            <text class="oc-total">
+              <text class="oc-total__label {{o._amountMuted ? 'is-muted' : ''}}">{{o._amountLabel}}</text>
+              <text class="oc-total-num {{o._amountMuted ? 'is-muted' : ''}}">¥{{o._pay}}</text>
+            </text>
+            <text class="oc-del tap tap-active" catchtap="deleteOrder" data-id="{{o.id}}">删除</text>
+          </view>
+          <view class="oc-actions" wx:if="{{o._status==='completed'}}">
+            <button class="oc-btn oc-btn--outline" data-id="{{o.id}}" bindtap="goReview">去评价</button>
+            <button class="oc-btn oc-btn--solid" data-id="{{o.id}}" bindtap="reorder">再来一单</button>
+          </view>
+          <view class="oc-actions" wx:if="{{o._status==='pending'}}">
+            <button class="oc-btn oc-btn--outline" data-id="{{o.id}}" bindtap="cancelOrder">取消订单</button>
+            <button class="oc-btn oc-btn--solid" data-id="{{o.id}}" bindtap="goPay">去支付</button>
+          </view>
+        </view>
+
+      </view>
+      <view class="list-end"></view>
+    </scroll-view>
+
+  </block>
+
+</view>

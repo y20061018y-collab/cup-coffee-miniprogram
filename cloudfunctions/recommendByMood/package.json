@@ -1,0 +1,9 @@
+{
+  "name": "recommendByMood",
+  "version": "1.0.0",
+  "description": "心情文案 -> 店内咖啡推荐（可选 OpenAI 兼容 API）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

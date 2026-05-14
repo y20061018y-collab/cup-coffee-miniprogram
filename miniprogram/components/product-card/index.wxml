@@ -1,0 +1,14 @@
+<view class="pc card tap tap-active" data-id="{{item.id}}" bindtap="onTap">
+  <image class="pc__img {{imgLoaded ? 'pc__img--loaded' : ''}}" src="{{item.cover}}" mode="aspectFill" lazy-load="true" bindload="onImgLoad" binderror="onImgLoad" />
+  <view class="pc__body">
+    <view class="pc__tags" wx:if="{{item.tags && item.tags.length}}">
+      <text class="pc__tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <text class="pc__name">{{item.name}}</text>
+    <text class="pc__sub text-muted">{{item.subtitle}}</text>
+    <view class="pc__ft">
+      <text class="pc__price">¥{{item.priceFrom}}</text>
+      <text class="pc__from text-muted" wx:if="{{item.priceFrom}}">起</text>
+    </view>
+  </view>
+</view>

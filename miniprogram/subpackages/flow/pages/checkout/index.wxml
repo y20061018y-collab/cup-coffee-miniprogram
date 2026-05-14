@@ -1,0 +1,45 @@
+<view class="page co {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="co-hero">
+    <text class="co-hero__eyebrow">CHECKOUT</text>
+    <text class="co-hero__title">{{orderMood}}</text>
+    <text class="co-hero__sub">{{etaText}}，适合录屏展示完整下单闭环</text>
+  </view>
+  <view class="co-block card">
+    <view class="co-hd">取餐方式</view>
+    <view class="pickup-tabs">
+      <view class="pickup-tab {{pickupType==='store' ? 'is-on' : ''}}" data-type="store" bindtap="pickType">门店自提</view>
+      <view class="pickup-tab {{pickupType==='delivery' ? 'is-on' : ''}}" data-type="delivery" bindtap="pickType">外送</view>
+    </view>
+    <block wx:if="{{pickupType==='store'}}">
+      <view class="co-st">{{store && store.name ? store.name : '请选择门店'}}</view>
+      <view class="text-muted">{{store && store.address ? store.address : '下单前可在「我的」或首页切换门店'}}</view>
+    </block>
+    <block wx:else>
+      <view class="co-st">外送到当前位置（模拟）</view>
+      <view class="text-muted">本演示不采集真实地址，仅展示外送链路</view>
+    </block>
+  </view>
+  <view class="co-block card">
+    <view class="co-hd">订单摘要</view>
+    <view class="co-line" wx:for="{{lines}}" wx:key="rowKey" wx:for-item="l">
+      <image class="co-line__cover" src="{{l.cover}}" mode="aspectFill" wx:if="{{l.cover}}" />
+      <view class="co-line__main">
+        <text class="co-name">{{l.name}}</text>
+        <text class="text-muted co-spec">{{l.spec}} × {{l.qty}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="co-sum card">
+    <view class="co-row">
+      <text>商品小计</text>
+      <text>¥{{subTotal}}</text>
+    </view>
+  </view>
+  <view class="co-bar safe-bottom">
+    <view class="co-bar__meta">
+      <text class="co-bar__lab">价格</text>
+      <text class="co-bar__pay">¥{{pay}}</text>
+    </view>
+    <button class="co-btn" bindtap="submit">确认支付</button>
+  </view>
+</view>

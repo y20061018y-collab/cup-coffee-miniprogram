@@ -1,0 +1,20 @@
+<view class="page {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="hint text-muted">按模拟距离由近到远排序（可授权定位，否则使用城市默认点）</view>
+  <view
+    class="st card {{sel===item.id ? 'is-sel' : ''}}"
+    wx:for="{{list}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="choose"
+  >
+    <view class="st__name">{{item.name}}</view>
+    <view class="st__row text-muted">{{item.address}}</view>
+    <view class="st__ft">
+      <text class="text-muted">{{item.hours}}</text>
+      <text class="st__km">约 {{item.distanceKm}} km</text>
+    </view>
+  </view>
+  <view class="foot safe-bottom" wx:if="{{list.length}}">
+    <button class="btn" disabled="{{!sel}}" bindtap="confirm">确认当前门店</button>
+  </view>
+</view>

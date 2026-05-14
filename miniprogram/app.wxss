@@ -1,0 +1,210 @@
+/* 设计系统：极简、咖啡棕 + 米白，深色为反转 */
+page {
+  --color-bg: #f5f0e8;
+  --color-surface: #fdfcfa;
+  --color-text: #1c1410;
+  --color-text-secondary: #6b635b;
+  --color-border: rgba(44, 24, 16, 0.08);
+  --color-brand: #2c1810;
+  --color-accent: #8b5a2b;
+  /* 语义色（咖啡调性，避免刺眼纯红绿） */
+  --color-success: #5a6f52;
+  --color-warning: #9a7629;
+  --color-error: #924c3d;
+  --color-info: #4d6b73;
+  /* accent 半透明：与 --color-accent #8b5a2b 同 hue，一处改处处改 */
+  --color-accent-12: rgba(139, 90, 43, 0.12);
+  --color-accent-10: rgba(139, 90, 43, 0.1);
+  --color-accent-06: rgba(139, 90, 43, 0.06);
+  --color-accent-14: rgba(139, 90, 43, 0.14);
+  --color-accent-18: rgba(139, 90, 43, 0.18);
+  --color-accent-42: rgba(139, 90, 43, 0.42);
+  --color-accent-86: rgba(139, 90, 43, 0.86);
+  /* 品牌/色块上的主文字（如 hero、主按钮区浅色字） */
+  --color-on-brand: #f7f3ee;
+  --shadow-sm: 0 8rpx 32rpx rgba(44, 24, 16, 0.06);
+  --radius-lg: 24rpx;
+  --font-display: "PingFang SC", "Helvetica Neue", sans-serif;
+
+  /* 字阶 */
+  --fs-kicker: 20rpx;
+  --fs-caption: 22rpx;
+  --fs-sm: 24rpx;
+  --fs-sub: 26rpx;
+  --fs-body: 28rpx;
+  --fs-price: 30rpx;
+  --fs-title-sm: 32rpx;
+  --fs-section: 34rpx;
+  --fs-panel: 38rpx;
+  --fs-display: 40rpx;
+  --fs-display-xl: 44rpx;
+  --fs-hero: 52rpx;
+  --fs-mega: 56rpx;
+
+  /* 行高 */
+  --lh-tight: 1.25;
+  --lh-snug: 1.4;
+  --lh-readable: 1.5;
+  --lh-body: 1.55;
+  --lh-relaxed: 1.62;
+
+  /* 间距（8pt 阶梯 + 页边与卡片常用值） */
+  --sp-1: 8rpx;
+  --sp-2: 12rpx;
+  --sp-3: 16rpx;
+  --sp-4: 24rpx;
+  --sp-5: 32rpx;
+  --sp-6: 48rpx;
+  --sp-card-y: 30rpx;
+  --page-pad-x: 32rpx;
+
+  /* 触摸目标：对齐 ~44px / 750 设计稿 88rpx（主按钮、分段 Tab、结算条等） */
+  --touch-target-min: 88rpx;
+
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+page.theme-dark {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-text: #f0ebe6;
+  --color-text-secondary: #9a918a;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-brand: #d4a574;
+  --color-accent: #c99862;
+  --color-success: #8faa85;
+  --color-warning: #c9a05a;
+  --color-error: #c97a6a;
+  --color-info: #8baeb8;
+  --color-accent-12: rgba(201, 152, 98, 0.12);
+  --color-accent-10: rgba(201, 152, 98, 0.1);
+  --color-accent-06: rgba(201, 152, 98, 0.06);
+  --color-accent-14: rgba(201, 152, 98, 0.14);
+  --color-accent-18: rgba(201, 152, 98, 0.18);
+  --color-accent-42: rgba(201, 152, 98, 0.42);
+  --color-accent-86: rgba(201, 152, 98, 0.86);
+  --color-on-brand: #1c1410;
+  --shadow-sm: 0 8rpx 32rpx rgba(0, 0, 0, 0.35);
+  background: var(--color-bg);
+}
+
+/* 各页根节点常用 <view class="page"> + theme-dark，与原生 page 不同级，需同步变量，否则仅导航/Tab 变色、中间仍浅色 */
+.page.theme-dark,
+.theme-wrap.theme-dark {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-text: #f0ebe6;
+  --color-text-secondary: #9a918a;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-brand: #d4a574;
+  --color-accent: #c99862;
+  --color-success: #8faa85;
+  --color-warning: #c9a05a;
+  --color-error: #c97a6a;
+  --color-info: #8baeb8;
+  --color-accent-12: rgba(201, 152, 98, 0.12);
+  --color-accent-10: rgba(201, 152, 98, 0.1);
+  --color-accent-06: rgba(201, 152, 98, 0.06);
+  --color-accent-14: rgba(201, 152, 98, 0.14);
+  --color-accent-18: rgba(201, 152, 98, 0.18);
+  --color-accent-42: rgba(201, 152, 98, 0.42);
+  --color-accent-86: rgba(201, 152, 98, 0.86);
+  --color-on-brand: #1c1410;
+  --shadow-sm: 0 8rpx 32rpx rgba(0, 0, 0, 0.35);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* 子级 .page 管主题变量，但原生 <page> 只有全局浅色。铺满视口，避免从缝隙露出浅色底。 */
+page > .page {
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background: initial;
+  padding: 0;
+  margin: 0;
+}
+button::after {
+  border: none;
+}
+
+.safe-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1rpx solid var(--color-border);
+}
+
+.heading-xl {
+  font-size: var(--fs-display-xl);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.text-muted {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-sm);
+}
+/* secondary 在 --color-bg / --color-surface 上抽样对比约 ≥4.5:1（浅/深主题 token） */
+
+/* 语义字阶工具类（按需组合 .text-muted 等） */
+.text-kicker {
+  font-size: var(--fs-kicker);
+}
+.text-caption {
+  font-size: var(--fs-caption);
+}
+.text-body {
+  font-size: var(--fs-body);
+}
+.text-sub {
+  font-size: var(--fs-sub);
+}
+.text-title-sm {
+  font-size: var(--fs-title-sm);
+  font-weight: 600;
+}
+.text-section-title {
+  font-size: var(--fs-section);
+  font-weight: 700;
+}
+.text-display {
+  font-size: var(--fs-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* 常用留白（页面根节点可加） */
+.pad-page-x {
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
+}
+.gap-stack-sm {
+  gap: var(--sp-2);
+}
+.gap-stack-md {
+  gap: var(--sp-4);
+}
+
+.tap {
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+.tap-active:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}

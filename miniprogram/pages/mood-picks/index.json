@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "心情选杯",
+  "usingComponents": {
+    "product-card": "/components/product-card/index"
+  }
+}

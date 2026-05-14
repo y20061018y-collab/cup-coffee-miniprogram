@@ -1,0 +1,42 @@
+<view class="page success {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="success__kicker">PAYMENT COMPLETE</view>
+  <view class="latte-card card">
+    <view class="latte">
+      <view class="latte__crema c1"></view>
+      <view class="latte__crema c2"></view>
+      <view class="latte__shine"></view>
+      <view class="latte__pour"></view>
+      <view class="latte__foam"></view>
+      <view class="latte-art">
+        <view class="latte-art__splash"></view>
+        <view class="latte-art__leaf latte-art__leaf--1"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--2"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--3"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--4"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--5"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--6"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__leaf latte-art__leaf--7"><view class="latte-art__leaf-bar"></view></view>
+        <view class="latte-art__accent"></view>
+      </view>
+    </view>
+    <view class="order-watermark">#{{orderId}}</view>
+  </view>
+  <view class="success__title">下单成功</view>
+  <view class="success__sub text-muted">咖啡师已经收到订单，拉花正在生成中</view>
+  <view class="success-info card">
+    <view class="success-info__item">
+      <text class="success-info__label">取餐号</text>
+      <text class="success-info__value">#{{orderNo}}</text>
+    </view>
+    <view class="success-info__item">
+      <text class="success-info__label">{{pickupText}}</text>
+      <text class="success-info__value">{{storeName}}</text>
+    </view>
+    <view class="success-info__item">
+      <text class="success-info__label">已支付</text>
+      <text class="success-info__value">¥{{pay}}</text>
+    </view>
+  </view>
+  <button class="success__btn" bindtap="goOrders">查看订单</button>
+  <button class="success__ghost" bindtap="goHome">回到首页</button>
+</view>

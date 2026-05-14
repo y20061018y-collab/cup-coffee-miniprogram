@@ -1,0 +1,7 @@
+<view class="sk">
+  <view class="sk__banner sk__shine"></view>
+  <view class="sk__row sk__shine"></view>
+  <view class="sk__grid">
+    <view class="sk__cell sk__shine" wx:for="{{[0,1,2,3]}}" wx:key="*this"></view>
+  </view>
+</view>

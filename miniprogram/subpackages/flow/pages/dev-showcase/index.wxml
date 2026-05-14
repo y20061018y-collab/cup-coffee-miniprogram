@@ -1,0 +1,98 @@
+<scroll-view class="page showcase {{theme==='dark' ? 'theme-dark' : ''}}" scroll-y>
+  <view class="hero card">
+    <text class="hero__eyebrow">CUP BRAND MINI PROGRAM</text>
+    <text class="hero__title">咖啡品牌小程序案例</text>
+    <text class="hero__desc">把点单工具包装成有视觉记忆点、可传播、可商单转化的品牌小程序 Demo。</text>
+    <view class="hero__stats">
+      <view class="stat" wx:for="{{caseStats}}" wx:key="label">
+        <text class="stat__value">{{item.value}}</text>
+        <text class="stat__label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section__hd">
+      <text class="section__kicker">CONTENT KIT</text>
+      <text class="section__title">小红书截图清单</text>
+      <text class="section__sub">按 9 宫格整理传播素材，录屏前可以直接照这个顺序截图。</text>
+    </view>
+    <view class="shot-grid">
+      <view class="shot-card card" wx:for="{{xhsShots}}" wx:key="title">
+        <text class="shot-card__title">{{item.title}}</text>
+        <text class="shot-card__note">{{item.note}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section__hd">
+      <text class="section__kicker">SHORT VIDEO</text>
+      <text class="section__title">抖音短视频脚本</text>
+      <text class="section__sub">覆盖氛围展示、商单转化和交互细节三个角度。</text>
+    </view>
+    <view class="script-card card" wx:for="{{douyinScripts}}" wx:for-item="script" wx:key="title">
+      <view class="script-card__top">
+        <text class="script-card__title">{{script.title}}</text>
+        <text class="script-card__hook">{{script.hook}}</text>
+      </view>
+      <view class="step" wx:for="{{script.steps}}" wx:for-item="step" wx:key="*this">
+        <view class="step__dot"></view>
+        <text class="step__text">{{step}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section__hd">
+      <text class="section__kicker">BILIBILI REVIEW</text>
+      <text class="section__title">B 站复盘大纲</text>
+      <text class="section__sub">适合做 3 到 8 分钟，从设计目标讲到商业价值。</text>
+    </view>
+    <view class="outline card">
+      <view class="outline__row" wx:for="{{bilibiliOutline}}" wx:key="*this">
+        <text class="outline__idx">0{{index + 1}}</text>
+        <text class="outline__text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section__hd">
+      <text class="section__kicker">BUSINESS CASE</text>
+      <text class="section__title">作品 / 合作说明</text>
+      <text class="section__sub">面向咖啡店、甜品店、轻食店和小众生活方式品牌，可作为接商单案例展示。</text>
+    </view>
+    <view class="case-card card">
+      <text class="case-card__title">可定制品牌小程序模板</text>
+      <text class="case-card__body">CUP 精品咖啡展示了一套从视觉种草到下单复购的完整链路：品牌首页建立调性，商品详情负责种草，规格半屏保留仪式感，结算和订单页完成商业闭环。</text>
+      <view class="deliverables">
+        <text class="tag" wx:for="{{deliverables}}" wx:key="*this">{{item}}</text>
+      </view>
+      <button class="pitch-btn tap tap-active" bindtap="copyPitch">复制合作介绍</button>
+    </view>
+
+    <view class="scope-card card">
+      <view class="scope-card__title">服务范围</view>
+      <view class="scope-row" wx:for="{{serviceScopes}}" wx:key="*this">
+        <text class="scope-row__mark">•</text>
+        <text class="scope-row__text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="process">
+      <view class="process__item card" wx:for="{{cooperationSteps}}" wx:key="title">
+        <text class="process__num">0{{index + 1}}</text>
+        <text class="process__title">{{item.title}}</text>
+        <text class="process__desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="tech-card card">
+      <text class="tech-card__title">技术可复用能力</text>
+      <text class="tech-card__text">原生小程序 + 组件化 UI；配置层与数据层解耦，可切换真实 API；全局 store 管理主题、用户和购物车；flow 分包承载结算、订单、成功页和本展示页，适合扩展到烘焙、轻餐饮、零售 O2O。</text>
+    </view>
+  </view>
+</scroll-view>

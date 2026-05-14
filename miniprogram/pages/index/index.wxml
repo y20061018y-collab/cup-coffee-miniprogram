@@ -1,0 +1,176 @@
+<view class="page theme-wrap {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="nav" style="padding-top: {{statusBar}}px">
+    <view class="nav__inner">
+      <text class="nav__title">CUP</text>
+    </view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <home-skeleton />
+  </block>
+  <block wx:else>
+    <view class="content">
+      <view class="hero">
+        <view class="hero__ambient hero__ambient--one"></view>
+        <view class="hero__ambient hero__ambient--two"></view>
+        <swiper
+          wx:if="{{heroSlides.length}}"
+          class="hero__swiper"
+          circular="{{heroSlides.length > 1}}"
+          autoplay="{{heroSlides.length > 1}}"
+          interval="5200"
+          duration="480"
+          easing-function="easeInOutCubic"
+          indicator-dots="{{heroSlides.length > 1}}"
+          indicator-color="rgba(255,255,255,0.35)"
+          indicator-active-color="#ffffff"
+          indicator-class="hero__swiper-dots"
+          style="transform: translate3d(0, {{heroParallaxY}}rpx, 0);"
+        >
+          <swiper-item wx:for="{{heroSlides}}" wx:key="id">
+            <view class="hero__slide {{item._loaded ? 'hero__slide--loaded' : ''}}">
+              <image
+                class="hero__img"
+                src="{{item.image}}"
+                mode="aspectFill"
+                data-slide-id="{{item.id}}"
+                bindload="onHeroSlideImageLoad"
+                binderror="onHeroSlideImageLoad"
+              />
+              <view class="hero__shade"></view>
+              <view class="hero__copy">
+                <text class="hero__eyebrow">{{item.label}}</text>
+                <text class="hero__title">{{item.title}}</text>
+                <text class="hero__desc">{{item.desc}}</text>
+                <view class="hero__cta tap tap-active" catchtap="onOpenMoodInspire">
+                  <view class="hero__cta-texts">
+                    <text>开启今日咖啡灵感</text>
+                    <text class="hero__cta-sub">不急，30 秒就好</text>
+                  </view>
+                  <text class="hero__arrow">→</text>
+                </view>
+              </view>
+            </view>
+          </swiper-item>
+        </swiper>
+      </view>
+      <view class="mood-panel card">
+        <view class="mood-panel__hd">
+          <view class="mood-panel__titles">
+            <text class="mood-panel__kicker">MOOD MENU</text>
+            <text class="mood-panel__title">
+              {{moodMenuFull ? '按今天的心情选一杯' : '先从一个小选择开始'}}
+            </text>
+          </view>
+          <text
+            wx:if="{{moodMenuFull}}"
+            class="mood-panel__collapse tap-active"
+            bindtap="onCollapseMoodMenu"
+          >收起</text>
+        </view>
+        <block wx:if="{{moodMenuFull}}">
+          <view class="mood-grid">
+            <view class="mood-row" wx:for="{{moodRows}}" wx:for-item="row" wx:key="rowId">
+              <view class="mood-card tap tap-active" data-id="{{row.left.id}}" bindtap="onMoodTap">
+                <text class="mood-card__label">{{row.left.label}}</text>
+                <text class="mood-card__note">{{row.left.note}}</text>
+              </view>
+              <view class="mood-card tap tap-active" data-id="{{row.right.id}}" bindtap="onMoodTap">
+                <text class="mood-card__label">{{row.right.label}}</text>
+                <text class="mood-card__note">{{row.right.note}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="mood-peek">
+            <view class="mood-peek__btn tap tap-active" bindtap="onPeekRecommend">
+              <text class="mood-peek__btn-label">先看今日推荐</text>
+              <text class="mood-peek__btn-note">往下刷，挑上镜款</text>
+            </view>
+            <view class="mood-peek__btn mood-peek__btn--alt tap tap-active" bindtap="onExpandMoodMenu">
+              <text class="mood-peek__btn-label">按心情慢慢来</text>
+              <text class="mood-peek__btn-note">展开 8 种心情入口</text>
+            </view>
+          </view>
+          <text class="mood-peek__hint">不急，都可以按你的节奏来。</text>
+        </block>
+      </view>
+      <view class="section__hd" id="rec-anchor">
+        <text class="heading-xl">今天推荐这些上镜款</text>
+        <text class="text-muted sub">适合截图、录屏和慢慢喝的咖啡灵感</text>
+      </view>
+      <view class="grid">
+        <view class="grid__item rec-card" wx:for="{{recommended}}" wx:key="id" style="animation-delay: {{item._delay}}ms;">
+          <product-card item="{{item}}" bind:select="onProduct" />
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="mood-inspire-layer" wx:if="{{moodInspireVisible}}">
+    <view class="mood-inspire-mask" catchtap="onCloseMoodInspire" />
+    <view class="mood-inspire-panel theme-wrap {{theme==='dark' ? 'theme-dark' : ''}}">
+      <text class="mood-inspire-title">{{moodInspireTitle}}</text>
+      <text class="mood-inspire-hint">{{moodInspireHint}}</text>
+      <textarea
+        class="mood-inspire-field"
+        value="{{moodInspireText}}"
+        maxlength="120"
+        placeholder="{{moodInspirePlaceholder}}"
+        placeholder-class="mood-inspire-placeholder"
+        show-confirm-bar="{{false}}"
+        auto-height
+        disabled="{{moodInspireSubmitting}}"
+        bindinput="onMoodInspireInput"
+      />
+      <view class="mood-inspire-actions">
+        <button class="mood-inspire-btn mood-inspire-btn--ghost" disabled="{{moodInspireSubmitting}}" bindtap="onCloseMoodInspire">{{moodInspireCancelLabel}}</button>
+        <button
+          class="mood-inspire-btn mood-inspire-btn--primary"
+          disabled="{{moodInspireSubmitting}}"
+          loading="{{moodInspireSubmitting}}"
+          bindtap="onMoodInspireSubmit"
+        >
+          {{moodInspireSubmitLabel}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view class="mood-result-layer" wx:if="{{moodResultVisible}}">
+    <view class="mood-result-mask" catchtap="onCloseMoodResult" />
+    <view class="mood-result-panel theme-wrap {{theme==='dark' ? 'theme-dark' : ''}}">
+      <view class="mood-result-head">
+        <text class="mood-result-kicker">FOR YOUR MOOD</text>
+        <text class="mood-result-title">今日推荐</text>
+      </view>
+      <view class="mood-result-card">
+        <image
+          class="mood-result-cover"
+          src="{{moodResultCover}}"
+          mode="aspectFill"
+          wx:if="{{moodResultCover}}"
+        />
+        <view class="mood-result-cover mood-result-cover--placeholder" wx:else />
+        <view class="mood-result-meta">
+          <text class="mood-result-name">{{moodResultName}}</text>
+          <text class="mood-result-sub" wx:if="{{moodResultSubtitle}}">{{moodResultSubtitle}}</text>
+        </view>
+      </view>
+      <view wx:if="{{moodResultCelebration}}" class="mood-result-celebration-wrap">
+        <text class="mood-result-celebration">{{moodResultCelebration}}</text>
+      </view>
+      <view class="mood-result-quote">
+        <text class="mood-result-reason">{{moodResultReason}}</text>
+      </view>
+      <view class="mood-result-actions mood-result-actions--stack">
+        <button class="mood-result-btn mood-result-btn--primary tap-active mood-result-btn--full" bindtap="onMoodResultGoDetail">就选这杯</button>
+        <view class="mood-result-actions-row">
+          <button class="mood-result-btn mood-result-btn--ghost tap-active mood-result-btn--half" bindtap="onMoodResultRefine">再换一句说说</button>
+          <button class="mood-result-btn mood-result-btn--ghost tap-active mood-result-btn--half" bindtap="onCloseMoodResult">留在首页</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

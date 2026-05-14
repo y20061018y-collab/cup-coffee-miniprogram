@@ -1,0 +1,24 @@
+<view class="page mood-picks {{theme==='dark' ? 'theme-dark' : ''}}">
+  <view class="mood-picks__hd" wx:if="{{!loading}}">
+    <view class="mood-picks__hd-inner">
+      <view class="mood-picks__kicker-row">
+        <view class="mood-picks__kicker-line" />
+        <text class="mood-picks__kicker">MOOD</text>
+      </view>
+      <text class="mood-picks__title">{{moodTitle}}</text>
+      <text class="mood-picks__note">{{moodNote}}</text>
+    </view>
+  </view>
+  <view class="mood-picks__body" wx:if="{{!loading}}">
+    <view class="grid">
+      <view class="grid__item" wx:for="{{list}}" wx:key="id" style="animation-delay: {{index * 60}}ms;">
+        <product-card item="{{item}}" bind:select="onProduct" />
+      </view>
+    </view>
+    <view class="mood-picks__empty text-muted" wx:if="{{!list.length}}">暂无推荐商品</view>
+  </view>
+  <view class="mood-picks__skel" wx:if="{{loading}}">
+    <view class="mood-picks__skel-line"></view>
+    <view class="mood-picks__skel-line mood-picks__skel-line--short"></view>
+  </view>
+</view>

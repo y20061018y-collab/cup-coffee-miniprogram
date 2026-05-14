@@ -1,0 +1,191 @@
+<view class="page detail {{theme==='dark' ? 'theme-dark' : ''}}">
+  <swiper
+    class="d-swiper"
+    indicator-dots
+    current="{{imgIdx}}"
+    autoplay="{{images.length > 1}}"
+    interval="4000"
+    duration="500"
+    circular="{{images.length > 1}}"
+    bindchange="onSwiperChange"
+  >
+    <swiper-item wx:for="{{images}}" wx:for-item="img" wx:for-index="idx" wx:key="idx">
+      <image
+        class="d-swiper__img tap tap-active {{imgLoaded[idx] ? 'd-swiper__img--loaded' : ''}}"
+        src="{{img}}"
+        mode="aspectFill"
+        data-idx="{{idx}}"
+        bindload="onGalleryImgLoad"
+        binderror="onGalleryImgLoad"
+        bindtap="onGalleryPreview"
+      />
+    </swiper-item>
+  </swiper>
+  <view class="d-body">
+    <view class="d-hero-card card">
+      <text class="d-kicker">SIGNATURE CUP</text>
+      <view class="d-title">{{product.name}}</view>
+      <text class="d-sub text-muted">{{product.subtitle}}</text>
+      <view class="d-flavors" wx:if="{{product.story && product.story.flavor && product.story.flavor.length}}">
+        <text class="d-flavor" wx:for="{{product.story.flavor}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+    <view class="d-tags" wx:if="{{product.tags && product.tags.length}}">
+      <text class="d-tag" wx:for="{{product.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="story-card card" wx:if="{{product.story}}">
+      <view class="story-card__hd">
+        <text class="story-card__kicker">COFFEE NOTE</text>
+        <text class="story-card__title">这一杯适合怎么喝</text>
+      </view>
+      <view class="story-feature">
+        <text class="story-feature__label">推荐理由</text>
+        <text class="story-feature__text">{{product.story.reason}}</text>
+      </view>
+      <view class="story-grid">
+        <view class="story-item">
+          <text class="story-item__label">适合场景</text>
+          <text class="story-item__text">{{product.story.scene}}</text>
+        </view>
+        <view class="story-item">
+          <text class="story-item__label">饮用建议</text>
+          <text class="story-item__text">{{product.story.drink}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="share-card card" wx:if="{{product.id}}">
+      <view class="share-card__hd">
+        <view>
+          <text class="share-card__kicker">REAL MOMENTS</text>
+          <text class="share-card__title">用户真实图片和评论</text>
+        </view>
+        <view class="share-card__actions">
+          <button class="share-upload-btn tap tap-active" bindtap="openUploadSheet">+ 上传</button>
+        </view>
+      </view>
+      <text class="share-card__sub">看看大家实拍的杯身、颜色和搭配，找到更接近你想要的那一杯。</text>
+      <scroll-view scroll-x class="share-scroll" show-scrollbar="{{false}}" wx:if="{{product.userShares && product.userShares.length}}">
+        <view class="share-list">
+          <view class="share-item" wx:for="{{product.userShares}}" wx:key="id">
+            <image class="share-item__img" src="{{item.image}}" mode="aspectFill" data-image="{{item.image}}" bindtap="previewShareImage" />
+            <view class="share-item__body">
+              <view class="share-user">
+                <text class="share-user__avatar">{{item.avatarText}}</text>
+                <text class="share-user__name">{{item.user}}</text>
+              </view>
+              <text class="share-item__comment">{{item.comment}}</text>
+              <view class="share-tags">
+                <text class="share-tag" wx:for="{{item.tags}}" wx:key="*this">#{{item}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="share-empty" wx:else>
+        <text class="share-empty__text">还没有人分享，来第一个上传吧</text>
+      </view>
+    </view>
+  </view>
+  <view class="d-bar safe-bottom">
+    <button class="d-bar__btn tap tap-active" disabled="{{!canAdd}}" bindtap="openSkuSheet">选规格</button>
+  </view>
+  <sku-selector
+    product="{{product}}"
+    show="{{sheetVisible}}"
+    theme="{{theme}}"
+    bind:close="onSheetClose"
+    bind:add="onSheetAdd"
+    bind:err="onSheetErr"
+  />
+
+  <!-- 加购成功：居中品牌卡片 -->
+  <view class="addok-root" wx:if="{{addOkVisible && addOk}}">
+    <view class="addok-mask" catchtap="onAddOkBrowse" />
+    <view class="addok-card theme-wrap {{theme==='dark' ? 'theme-dark' : ''}}">
+      <view class="addok-hero">
+        <view class="addok-badge" aria-hidden="true">✓</view>
+        <text class="addok-title">已加入购物袋</text>
+      </view>
+      <view class="addok-preview">
+        <image
+          wx:if="{{addOk.cover}}"
+          class="addok-cover"
+          src="{{addOk.cover}}"
+          mode="aspectFill"
+        />
+        <view class="addok-preview-body">
+          <text class="addok-name">{{addOk.name}}</text>
+          <text class="addok-spec">{{addOk.spec}}</text>
+          <text class="addok-qty">数量 ×{{addOk.qty}}</text>
+        </view>
+      </view>
+      <view class="addok-copy">
+        <text class="addok-copy-line">要现在结算吗？</text>
+        <text class="addok-copy-line">也可以继续逛逛其它饮品。</text>
+      </view>
+      <view class="addok-actions">
+        <button class="addok-btn addok-btn--ghost tap tap-active" bindtap="onAddOkBrowse">再逛逛</button>
+        <button class="addok-btn addok-btn--primary tap tap-active" bindtap="onAddOkCheckout">去结算</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 上传分享面板 -->
+  <view class="up-root" wx:if="{{uploadVisible}}">
+    <view class="up-mask" catchtap="closeUploadSheet" />
+    <view class="up-panel theme-wrap {{theme==='dark' ? 'theme-dark' : ''}}">
+      <view class="sku-drag" />
+      <scroll-view scroll-y class="up-scroll" show-scrollbar="{{false}}">
+        <view class="up-title">
+          <text class="up-title__eyebrow">SHARE YOUR CUP</text>
+          <text class="up-title__main">分享你的这一杯</text>
+          <text class="up-title__sub">上传实拍图，帮助更多人找到最适合自己的咖啡</text>
+        </view>
+
+        <view class="up-section">
+          <text class="up-label">上传图片 <text class="up-required">必填</text></text>
+          <view class="up-img-area" bindtap="chooseUploadImage">
+            <block wx:if="{{upload.image}}">
+              <image class="up-img-preview" src="{{upload.image}}" mode="aspectFill" />
+              <view class="up-img-remove" catchtap="removeUploadImage">✕</view>
+            </block>
+            <block wx:else>
+              <text class="up-img-icon">＋</text>
+              <text class="up-img-hint">点击选择图片</text>
+            </block>
+          </view>
+        </view>
+
+        <view class="up-section">
+          <text class="up-label">评论</text>
+          <textarea
+            class="up-textarea"
+            placeholder="说说这杯的味道、颜色或者搭配…"
+            placeholder-class="up-placeholder"
+            maxlength="100"
+            value="{{upload.comment}}"
+            bindinput="onCommentInput"
+          />
+        </view>
+
+        <view class="up-section">
+          <text class="up-label">使用场景</text>
+          <input
+            class="up-input"
+            placeholder="比如：周末在家读书、通勤路上"
+            placeholder-class="up-placeholder"
+            maxlength="30"
+            value="{{upload.scene}}"
+            bindinput="onSceneInput"
+          />
+        </view>
+        <view class="up-gap" />
+      </scroll-view>
+
+      <view class="up-foot safe-bottom">
+        <button class="up-foot__cancel tap tap-active" bindtap="closeUploadSheet">取消</button>
+        <button class="up-foot__submit tap tap-active" bindtap="submitShare">发布分享</button>
+      </view>
+    </view>
+  </view>
+</view>

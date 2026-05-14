@@ -1,0 +1,78 @@
+{
+  "cloud": true,
+  "__usePrivacyCheck__": true,
+  "pages": [
+    "pages/index/index",
+    "pages/category/index",
+    "pages/mood-picks/index",
+    "pages/cart/index",
+    "pages/user/index",
+    "pages/store-pick/index"
+  ],
+  "subPackages": [
+    {
+      "root": "subpackages/media",
+      "name": "media",
+      "pages": [
+        "pages/goods/detail",
+        "pages/placeholder/index"
+      ]
+    },
+    {
+      "root": "subpackages/flow",
+      "name": "flow",
+      "pages": [
+        "pages/checkout/index",
+        "pages/order-success/index",
+        "pages/orders/index",
+        "pages/dev-showcase/index"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": { "network": "all", "packages": ["media"] },
+    "pages/cart/index": { "network": "all", "packages": ["flow"] }
+  },
+  "window": {
+    "backgroundColor": "#F5F0E8",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F5F0E8",
+    "navigationBarTitleText": "CUP",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#7A6D63",
+    "selectedColor": "#2C1810",
+    "backgroundColor": "#FDFCFA",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/images/icons/home.png",
+        "selectedIconPath": "/images/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/category/index",
+        "text": "分类",
+        "iconPath": "/images/icons/goods.png",
+        "selectedIconPath": "/images/icons/goods-active.png"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
+        "iconPath": "/images/icons/business.png",
+        "selectedIconPath": "/images/icons/business-active.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "/images/icons/usercenter.png",
+        "selectedIconPath": "/images/icons/usercenter-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

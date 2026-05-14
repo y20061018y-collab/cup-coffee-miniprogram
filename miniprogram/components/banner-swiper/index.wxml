@@ -1,0 +1,15 @@
+<swiper
+  class="ban"
+  indicator-dots="{{list.length>1}}"
+  indicator-color="rgba(0,0,0,.15)"
+  indicator-active-color="#2C1810"
+  circular="{{list.length>1}}"
+  autoplay="{{autoplay}}"
+  interval="4800"
+  duration="500"
+  bindchange="onChange"
+>
+  <swiper-item wx:for="{{list}}" wx:key="id" class="ban__item" data-link="{{item.link}}" bindtap="onTapItem">
+    <image class="ban__img" src="{{item.image}}" mode="aspectFill" />
+  </swiper-item>
+</swiper>
