@@ -71,16 +71,23 @@ Page({
     })
     const sub = Number(cart.subtotal(lines).toFixed(2))
     const st = store.getState()
+    const couponCtx = { hasOrdered: orderApi.hasUserOrder() }
     let selectedCoupon = st.selectedCoupon
-    if (selectedCoupon && !couponsApi.isEligible(selectedCoupon, sub)) {
+    if (
+      selectedCoupon &&
+      !couponsApi.isEligible(selectedCoupon, sub, couponCtx)
+    ) {
       store.setSelectedCoupon(null)
       selectedCoupon = null
     }
-    const discount = couponsApi.discountFor(selectedCoupon, sub)
+    const discount = couponsApi.discountFor(selectedCoupon, sub, couponCtx)
     const couponList = couponsApi.list().map((coupon) => ({
       ...coupon,
-      eligible: couponsApi.isEligible(coupon, sub),
-      discountText: '-¥' + couponsApi.discountFor(coupon, sub).toFixed(2),
+      eligible: couponsApi.isEligible(coupon, sub, couponCtx),
+      discountText:
+        '-¥' +
+        couponsApi.discountFor(coupon, sub, couponCtx).toFixed(2),
+      reason: couponsApi.ineligibleReason(coupon, sub, couponCtx),
       selected: !!selectedCoupon && selectedCoupon.id === coupon.id,
     }))
     this.setData({
@@ -99,8 +106,13 @@ Page({
       (item) => item.id === e.currentTarget.dataset.id
     )
     if (!coupon) return
-    if (!couponsApi.isEligible(coupon, Number(this.data.subTotal))) {
-      wx.showToast({ title: '未满足使用门槛', icon: 'none' })
+    const couponCtx = { hasOrdered: orderApi.hasUserOrder() }
+    const sub = Number(this.data.subTotal)
+    if (!couponsApi.isEligible(coupon, sub, couponCtx)) {
+      wx.showToast({
+        title: couponsApi.ineligibleReason(coupon, sub, couponCtx),
+        icon: 'none',
+      })
       return
     }
     const selectedCoupon = store.getState().selectedCoupon

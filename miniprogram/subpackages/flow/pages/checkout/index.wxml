@@ -43,7 +43,8 @@
         <text class="coupon-item__name">{{c.name}}</text>
         <text class="coupon-item__desc">{{c.desc}}</text>
       </view>
-      <text class="coupon-item__discount">{{c.discountText}}</text>
+      <text class="coupon-item__discount" wx:if="{{c.eligible}}">{{c.discountText}}</text>
+      <text class="coupon-item__discount" wx:else>{{c.reason}}</text>
     </view>
   </view>
   <view class="co-sum card">

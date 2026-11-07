@@ -47,6 +47,12 @@ function remove(id) {
   return true
 }
 
+function hasUserOrder() {
+  return all().some(
+    (o) => !String(o.id).startsWith('seed') && o.status !== 'cancelled'
+  )
+}
+
 /** 首次运行注入三条覆盖三种状态的演示数据 */
 function seed() {
   try {
@@ -128,4 +134,4 @@ function seed() {
   } catch (e) {}
 }
 
-module.exports = { all, add, update, remove, seed }
+module.exports = { all, add, update, remove, seed, hasUserOrder }

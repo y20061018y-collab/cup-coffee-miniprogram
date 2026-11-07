@@ -2,6 +2,7 @@ const coupons = [
   {
     id: 'cp1',
     name: '首单立减 8 元',
+    firstOrderOnly: true,
     offAmount: 8,
     minAmount: 39,
     desc: '满 39 可用',
@@ -27,12 +28,19 @@ function list() {
   return coupons
 }
 
-function isEligible(coupon, subtotal) {
-  return !!coupon && subtotal >= (coupon.minAmount || 0)
+function isEligible(coupon, subtotal, ctx = {}) {
+  if (!coupon || (coupon.firstOrderOnly && ctx.hasOrdered)) return false
+  return subtotal >= (coupon.minAmount || 0)
 }
 
-function discountFor(coupon, subtotal) {
-  if (!isEligible(coupon, subtotal)) return 0
+function ineligibleReason(coupon, subtotal, ctx = {}) {
+  if (coupon && coupon.firstOrderOnly && ctx.hasOrdered) return '仅限首单使用'
+  if (!coupon || subtotal < (coupon.minAmount || 0)) return '未满足使用门槛'
+  return ''
+}
+
+function discountFor(coupon, subtotal, ctx = {}) {
+  if (!isEligible(coupon, subtotal, ctx)) return 0
   const discount = coupon.isMemberPercent
     ? subtotal * 0.05
     : Math.min(coupon.offAmount, subtotal)
@@ -43,4 +51,4 @@ function discountFor(coupon, subtotal) {
  * @typedef {typeof coupons[0]} Coupon
  */
 
-module.exports = { list, isEligible, discountFor }
+module.exports = { list, isEligible, ineligibleReason, discountFor }
