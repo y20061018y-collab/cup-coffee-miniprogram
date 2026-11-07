@@ -57,6 +57,59 @@
   font-weight: 600;
   margin-bottom: 8rpx;
 }
+.coupon-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-top: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 18rpx;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.coupon-item.is-on {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-on-brand);
+}
+.theme-dark .coupon-item.is-on {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-on-brand);
+}
+.coupon-item.is-ineligible {
+  opacity: 0.48;
+}
+.coupon-item__main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.coupon-item__name {
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.coupon-item__desc {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-caption);
+}
+.coupon-item.is-on .coupon-item__desc {
+  color: inherit;
+  opacity: 0.76;
+}
+.coupon-item__discount {
+  flex: none;
+  color: var(--color-brand);
+  font-size: var(--fs-sub);
+  font-weight: 600;
+}
+.coupon-item.is-on .coupon-item__discount {
+  color: inherit;
+}
 .pickup-tabs {
   display: flex;
   gap: 16rpx;
@@ -118,6 +171,13 @@
   font-size: var(--fs-body);
   padding: 6rpx 0;
   color: var(--color-text-secondary);
+}
+.co-row--pay {
+  margin-top: 8rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 600;
 }
 .co-bar {
   position: fixed;

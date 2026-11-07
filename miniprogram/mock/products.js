@@ -12,7 +12,7 @@ const categories = [
   { id: 'c6', name: '季节限定', sort: 6 },
 ]
 
-let inventory = {
+const INITIAL_INVENTORY = Object.freeze({
   s1: 32,
   s2: 18,
   s3: 9,
@@ -29,7 +29,8 @@ let inventory = {
   s14: 18,
   s15: 16,
   s16: 14,
-}
+})
+let inventory = { ...INITIAL_INVENTORY }
 
 const products = [
   {
@@ -496,11 +497,15 @@ function getInventory() {
   return { ...inventory }
 }
 
+function resetInventory() {
+  inventory = { ...INITIAL_INVENTORY }
+}
+
 function adjustStock(skuId, delta) {
-  if (!inventory[skuId]) return false
+  if (!(skuId in inventory)) return false
   const next = inventory[skuId] + delta
   if (next < 0) return false
-  inventory[skuId] = next
+  inventory[skuId] = Math.min(next, INITIAL_INVENTORY[skuId])
   return true
 }
 
@@ -584,6 +589,7 @@ module.exports = {
   getById,
   getByIds,
   getInventory,
+  resetInventory,
   adjustStock,
   withStock,
   recommendScore,

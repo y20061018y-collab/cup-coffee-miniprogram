@@ -1,5 +1,6 @@
 const key = 'cup_cart'
-const { adjustStock } = require('../mock/products.js')
+const products = require('../mock/products.js')
+const { adjustStock } = products
 
 function read() {
   try {
@@ -145,6 +146,43 @@ function removeRow(rowKeyStr) {
   return { ok: true }
 }
 
+function syncStockWithCart() {
+  products.resetInventory()
+  const inventory = products.getInventory()
+  const list = read()
+  const synced = []
+  let changed = false
+
+  list.forEach((line) => {
+    if (!line || !(line.skuId in inventory)) {
+      changed = true
+      return
+    }
+    let qty = Number(line.qty)
+    if (!(qty > 0)) {
+      changed = true
+      return
+    }
+    if (!adjustStock(line.skuId, -qty)) {
+      qty = Math.max(0, products.getInventory()[line.skuId])
+      if (qty > 0) adjustStock(line.skuId, -qty)
+    }
+    if (qty <= 0) {
+      changed = true
+      return
+    }
+    if (line.qty !== qty) {
+      changed = true
+      synced.push({ ...line, qty })
+    } else {
+      synced.push(line)
+    }
+  })
+
+  if (changed) write(synced)
+  return synced
+}
+
 function totalCount(list) {
   return list.reduce((s, l) => s + l.qty, 0)
 }
@@ -161,6 +199,7 @@ module.exports = {
   removeLines,
   applyQtyDelta,
   removeRow,
+  syncStockWithCart,
   totalCount,
   subtotal,
   rowKey,

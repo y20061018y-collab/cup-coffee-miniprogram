@@ -29,10 +29,36 @@
       </view>
     </view>
   </view>
+  <view class="co-block card">
+    <view class="co-hd">优惠券</view>
+    <view
+      class="coupon-item {{c.selected ? 'is-on' : ''}} {{!c.eligible ? 'is-ineligible' : ''}}"
+      wx:for="{{coupons}}"
+      wx:key="id"
+      wx:for-item="c"
+      data-id="{{c.id}}"
+      bindtap="pickCoupon"
+    >
+      <view class="coupon-item__main">
+        <text class="coupon-item__name">{{c.name}}</text>
+        <text class="coupon-item__desc">{{c.desc}}</text>
+      </view>
+      <text class="coupon-item__discount" wx:if="{{c.eligible}}">{{c.discountText}}</text>
+      <text class="coupon-item__discount" wx:else>{{c.reason}}</text>
+    </view>
+  </view>
   <view class="co-sum card">
     <view class="co-row">
       <text>商品小计</text>
       <text>¥{{subTotal}}</text>
+    </view>
+    <view class="co-row" wx:if="{{selectedCouponId}}">
+      <text>优惠券</text>
+      <text>-¥{{discount}}</text>
+    </view>
+    <view class="co-row co-row--pay">
+      <text>实付</text>
+      <text>¥{{pay}}</text>
     </view>
   </view>
   <view class="co-bar safe-bottom">
