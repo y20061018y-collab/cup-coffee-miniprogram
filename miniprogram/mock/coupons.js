@@ -27,8 +27,20 @@ function list() {
   return coupons
 }
 
+function isEligible(coupon, subtotal) {
+  return !!coupon && subtotal >= (coupon.minAmount || 0)
+}
+
+function discountFor(coupon, subtotal) {
+  if (!isEligible(coupon, subtotal)) return 0
+  const discount = coupon.isMemberPercent
+    ? subtotal * 0.05
+    : Math.min(coupon.offAmount, subtotal)
+  return Number(discount.toFixed(2))
+}
+
 /**
  * @typedef {typeof coupons[0]} Coupon
  */
 
-module.exports = { list }
+module.exports = { list, isEligible, discountFor }

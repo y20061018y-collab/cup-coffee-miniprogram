@@ -1,6 +1,7 @@
 const cart = require('../../../../utils/cart.js')
 const { rowKey: cartRowKey } = cart
 const products = require('../../../../mock/products.js')
+const couponsApi = require('../../../../mock/coupons.js')
 const spec = require('../../../../utils/specConfig.js')
 const orderApi = require('../../../../mock/orders.js')
 const store = require('../../../../store/index.js')
@@ -10,6 +11,9 @@ Page({
     lines: [],
     subTotal: '0.00',
     pay: '0.00',
+    coupons: [],
+    selectedCouponId: '',
+    discount: '0.00',
     store: null,
     pickupType: 'store',
     theme: 'light',
@@ -67,19 +71,58 @@ Page({
     })
     const sub = Number(cart.subtotal(lines).toFixed(2))
     const st = store.getState()
+    let selectedCoupon = st.selectedCoupon
+    if (selectedCoupon && !couponsApi.isEligible(selectedCoupon, sub)) {
+      store.setSelectedCoupon(null)
+      selectedCoupon = null
+    }
+    const discount = couponsApi.discountFor(selectedCoupon, sub)
+    const couponList = couponsApi.list().map((coupon) => ({
+      ...coupon,
+      eligible: couponsApi.isEligible(coupon, sub),
+      discountText: '-¥' + couponsApi.discountFor(coupon, sub).toFixed(2),
+      selected: !!selectedCoupon && selectedCoupon.id === coupon.id,
+    }))
     this.setData({
       lines,
       subTotal: sub.toFixed(2),
-      pay: sub.toFixed(2),
+      pay: Math.max(0, sub - discount).toFixed(2),
+      coupons: couponList,
+      selectedCouponId: selectedCoupon ? selectedCoupon.id : '',
+      discount: discount.toFixed(2),
       store: st.store,
       orderMood: lines.length === 1 ? '你的专属咖啡卡片' : '今日咖啡组合已生成',
     })
+  },
+  pickCoupon(e) {
+    const coupon = couponsApi.list().find(
+      (item) => item.id === e.currentTarget.dataset.id
+    )
+    if (!coupon) return
+    if (!couponsApi.isEligible(coupon, Number(this.data.subTotal))) {
+      wx.showToast({ title: '未满足使用门槛', icon: 'none' })
+      return
+    }
+    const selectedCoupon = store.getState().selectedCoupon
+    store.setSelectedCoupon(
+      selectedCoupon && selectedCoupon.id === coupon.id ? null : coupon
+    )
+    this._rebuild()
   },
   pickType(e) {
     this.setData({ pickupType: e.currentTarget.dataset.type })
   },
   submit() {
-    const { lines, subTotal, pay, store: st, pickupType } = this.data
+    const {
+      lines,
+      subTotal,
+      pay,
+      discount,
+      selectedCouponId,
+      store: st,
+      pickupType,
+    } = this.data
+    const selectedCoupon = store.getState().selectedCoupon
     const checkoutKeys = wx.getStorageSync('cup_checkout_keys') || []
     const order = orderApi.add({
       lines: lines.map((l) => ({
@@ -90,9 +133,13 @@ Page({
       })),
       subTotal: Number(subTotal),
       pay: Number(pay),
+      couponId: selectedCouponId,
+      couponName: selectedCoupon ? selectedCoupon.name : '',
+      discount: Number(discount),
       pickupType,
       storeName: (st && st.name) || '',
     })
+    store.setSelectedCoupon(null)
     if (checkoutKeys.length) {
       cart.removeLines(checkoutKeys, false)
     } else {
