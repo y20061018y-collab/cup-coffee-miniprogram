@@ -1,4 +1,5 @@
 const key = 'cup_orders'
+const FIRST_ORDER_KEY = 'cup_first_order_used'
 
 const SEED_KEY = 'cup_orders_seeded_v2'
 
@@ -27,6 +28,11 @@ function add(order) {
   }
   list.unshift(item)
   save(list)
+  if (item.status !== 'cancelled') {
+    try {
+      wx.setStorageSync(FIRST_ORDER_KEY, true)
+    } catch (e) {}
+  }
   return item
 }
 
@@ -48,6 +54,9 @@ function remove(id) {
 }
 
 function hasUserOrder() {
+  try {
+    if (wx.getStorageSync(FIRST_ORDER_KEY)) return true
+  } catch (e) {}
   return all().some(
     (o) => !String(o.id).startsWith('seed') && o.status !== 'cancelled'
   )
