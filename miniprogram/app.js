@@ -16,6 +16,8 @@ App({
     store.hydrate()
     const st = store.getState()
     this.applyTheme(st.theme)
+    const cart = require('./utils/cart.js')
+    cart.syncStockWithCart()
     this._refreshCartBadge()
     try {
       wx.removeTabBarBadge({ index: 2 })
