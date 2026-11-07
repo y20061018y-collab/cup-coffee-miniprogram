@@ -1,6 +1,12 @@
 {
   "cloud": true,
   "__usePrivacyCheck__": true,
+  "requiredPrivateInfos": ["getLocation"],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于为你推荐附近的 CUP 门店"
+    }
+  },
   "pages": [
     "pages/index/index",
     "pages/category/index",
